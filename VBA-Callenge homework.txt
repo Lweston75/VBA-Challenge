@@ -1,0 +1,98 @@
+Sub Stockloop()
+
+Dim ws As Worksheet
+
+For Each ws In Worksheets
+
+Dim Ticker_Name As String
+Dim Yearly_Change As Double
+Dim Percent_Change As Double
+Dim Open_Price As Double
+Dim Close_price As Double
+
+
+Dim Total_Stock_Volume As Double
+Total_Stock_Volume = 0
+
+
+ws.Range("I1").Value = "Ticker"
+ws.Range("J1").Value = "Yearly Change"
+ws.Range("K1").Value = "Percent Change"
+ws.Range("L1").Value = "Total Stock Volume"
+ws.Range("P1").Value = "Ticker"
+ws.Range("Q1").Value = "Value"
+ws.Range("O2").Value = "Greatest % Increase"
+ws.Range("O3").Value = "Greatest % Decrease"
+ws.Range("O4").Value = "Greatest Total Volume"
+ws.Columns("A:Z").EntireColumn.AutoFit
+
+
+'keep track of the location for each ticker in the summary table
+Dim Summary_table_Row As Integer
+Summary_table_Row = 2
+
+
+ 
+'Dim LastRow As Long
+'LastRow = ws.Cells(Rows.Count, 1).End(x1up).Row 'kept getting error 1004 application defined or object defined error
+
+
+
+Dim i As Double
+
+
+
+ For i = 2 To 797711
+  
+    
+    
+
+    If Cells(i + 1, 1).Value <> Cells(i, 1).Value Then
+    
+    
+    
+    Ticker_Name = ws.Cells(i, 1).Value
+    
+    Total_Stock_Volume = Total_Stock_Volume + Cells(i, 7).Value
+    
+    ws.Range("I" & Summary_table_Row).Value = Ticker_Name
+    
+    ws.Range("L" & Summary_table_Row).Value = Total_Stock_Volume
+    
+    Summary_table_Row = Summary_table_Row + 1
+    
+    Total_Stock_Volume = 0
+    
+    Else
+    
+    Total_Stock_Volume = Total_Stock_Volume + Cells(i, 7).Value
+     
+    Open_Price = ws.Cells(i, 3).Value
+    Close_price = ws.Cells(i, 6).Value
+    Yearly_Change = Close_price - Open_Price
+    ws.Range("J" & Summary_table_Row).Value = Yearly_Change
+    
+    'Percent_Change = (Yearly_Change / Open_Price) *100 'kept getting error 6 overflow
+    
+    'ws.Range("K" & Summary_table_Row).Value = Percent_Change
+    'ws.Range("K" & Summary_table_Row).NumberFormat = "0.00%"
+   
+    If Yearly_Change >= 0 Then
+    ws.Range("J" & Summary_table_Row).Interior.ColorIndex = 4
+    Else
+    ws.Range("J" & Summary_table_Row).Interior.ColorIndex = 3
+    End If
+
+  
+   
+   
+   
+    
+    End If
+
+Next i
+
+
+Next
+
+End Sub
